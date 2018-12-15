@@ -13,9 +13,9 @@ import (
 )
 
 type Request struct {
-	mac_addresses []string
-	notification  string
-	device_id     string
+	Mac_addresses []string `json:"mac_addresses" binding:"required"`
+	Notification  string   `json:"notification" binding:"required"`
+	Device_id     string   `json:"device_id" binding:"required"`
 }
 
 func main() {
@@ -57,9 +57,11 @@ func main() {
 		if err := c.ShouldBindJSON(&req); err != nil {
 			// mac address can't be found
 			c.JSON(400, gin.H{"status": "Invalid Request"})
+			return
 		}
 		is_huawei_detected := false
-		for _, addr := range req.mac_addresses {
+		for _, addr := range req.Mac_addresses {
+			logger.Infof("%s found", addr)
 			if matcher.Match(addr) {
 				is_huawei_detected = true
 				break
@@ -72,13 +74,15 @@ func main() {
 			case
 				"slack":
 				slackhandler.PostSlack(jsonStr, logger)
+				c.JSON(200, gin.H{"status": "found"})
+				return
 			default:
 				logger.Errorf("no device notified")
+				c.JSON(400, gin.H{"status": "notification target not found"})
+				return
 			}
 		}
-		c.JSON(200, gin.H{
-			"status": "OK",
-		})
+		c.JSON(200, gin.H{"status": "target not found"})
 	})
 
 	router.Run(":" + port)
