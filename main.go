@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"github.com/PhysicsEngine/huawei-alert-server/config"
 	"github.com/PhysicsEngine/huawei-alert-server/matcher"
 	"github.com/PhysicsEngine/huawei-alert-server/notification"
@@ -56,7 +57,16 @@ func main() {
 	router.POST("/api/notification", func(c *gin.Context) {
 		// TODO: Call plugin with parameter
 		var req Request
-		logger.Infof("get request %s", c.Request.Body)
+		body, err := c.Request.GetBody()
+		if err != nil {
+			logger.Errorf("get request error %s", err)
+		} else {
+			buf := new(bytes.Buffer)
+			buf.ReadFrom(body)
+			bodyStr := buf.String()
+			logger.Infof("get request %s", bodyStr)
+		}
+
 		if err := c.ShouldBindJSON(&req); err != nil {
 			// mac address can't be found
 			c.JSON(400, gin.H{"status": "Invalid Request"})
