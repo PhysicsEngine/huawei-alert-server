@@ -24,7 +24,7 @@ format:
 
 .PHONY: check-format
 check-format:
-	@test -z "`gofmt -d ./..`"
+	@test -z `gofmt -d ./.. | tee /dev/stderr`
 
 .PHONY: test
 test: check-format
