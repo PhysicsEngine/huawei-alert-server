@@ -78,13 +78,17 @@ func main() {
 			case
 				"slack":
 				handler.Send(notifyDevice)
-				c.JSON(200, gin.H{"status": "found"})
+				c.JSON(200, gin.H{"status": "send notification to slack"})
 				return
 			case
 				"line":
 				handler.Send(notifyDevice)
-				c.JSON(200, gin.H{"status": "found"})
+				c.JSON(200, gin.H{"status": "send notification to line"})
 				return
+			case
+				"twitter":
+				handler.Send(notifyDevice)
+				c.JSON(200, gin.H{"status": "send notification to twitter"})
 
 			default:
 				logger.Errorf("not defined notification channel")
