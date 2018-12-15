@@ -65,7 +65,7 @@ func main() {
 			notifyDevice := "slack"
 			switch notifyDevice {
 				case "slack": slackhandler.PostSlack(jsonStr)
-				defaut: logger.error("no device notified") 
+				default: logger.Errorf("no device notified") 
 			}
 			jsonStr := "{}"
 			slackhandler.PostSlack(jsonStr)
