@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/PhysicsEngine/huawei-alert-server/config"
 	"github.com/PhysicsEngine/huawei-alert-server/matcher"
-	"github.com/PhysicsEngine/huawei-alert-server/slackhandler"
+	"github.com/PhysicsEngine/huawei-alert-server/notification"
 	"github.com/gin-gonic/gin"
 	_ "github.com/heroku/x/hmetrics/onload"
 	"go.uber.org/zap"
@@ -33,6 +33,8 @@ func main() {
 		logger.Errorf("Failed to read env vars: %s", err)
 		os.Exit(1)
 	}
+
+	handler := notification.Create(logger)
 
 	port := env.Port
 
@@ -68,21 +70,26 @@ func main() {
 			}
 		}
 		if is_huawei_detected {
-			notifyDevice := "slack"
-			jsonStr := "{}"
+			notifyDevice := req.Notification
 			switch notifyDevice {
 			case
 				"slack":
-				slackhandler.PostSlack(jsonStr, logger)
+				handler.Send(notifyDevice)
 				c.JSON(200, gin.H{"status": "found"})
 				return
+			case
+				"line":
+				handler.Send(notifyDevice)
+				c.JSON(200, gin.H{"status": "found"})
+				return
+				
 			default:
-				logger.Errorf("no device notified")
-				c.JSON(400, gin.H{"status": "notification target not found"})
+				logger.Errorf("not defined notification channel")
+				c.JSON(400, gin.H{"status": "notfication channel not found"})
 				return
 			}
 		}
-		c.JSON(200, gin.H{"status": "target not found"})
+		c.JSON(200, gin.H{"status": "target device not found"})
 	})
 
 	router.Run(":" + port)
