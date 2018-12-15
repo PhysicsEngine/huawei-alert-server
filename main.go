@@ -14,8 +14,8 @@ import (
 
 type Request struct {
 	Mac_addresses []string `json:"mac_addresses" binding:"required"`
-	Notification  string `json:"notification" binding:"required"`
-	Device_id     string `json:"device_id" binding:"required"`
+	Notification  string   `json:"notification" binding:"required"`
+	Device_id     string   `json:"device_id" binding:"required"`
 }
 
 func main() {
@@ -61,7 +61,7 @@ func main() {
 		}
 		is_huawei_detected := false
 		for _, addr := range req.Mac_addresses {
-			logger.Infof("%s found", addr) 
+			logger.Infof("%s found", addr)
 			if matcher.Match(addr) {
 				is_huawei_detected = true
 				break
@@ -82,7 +82,7 @@ func main() {
 				return
 			}
 		}
-		c.JSON(200, gin.H{ "status": "target not found", })
+		c.JSON(200, gin.H{"status": "target not found"})
 	})
 
 	router.Run(":" + port)
