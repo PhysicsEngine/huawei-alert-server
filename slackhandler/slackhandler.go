@@ -1,8 +1,8 @@
 package slackhandler
 
 import (
+	"bytes"
 	"go.uber.org/zap"
-	"log"
 	"net/http"
 )
 
