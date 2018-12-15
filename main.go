@@ -16,7 +16,7 @@ import (
 type Request struct {
 	mac_addresses []string
 	notification  string
-	device_id
+	device_id string
 }
 
 func main() {
