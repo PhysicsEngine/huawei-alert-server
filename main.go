@@ -36,7 +36,7 @@ func main() {
 	router.LoadHTMLGlob("templates/*.tmpl.html")
 	router.Static("/static", "static")
 
-	matcher, err := createHuaweiMatcher()
+	matcher, err := matcher.createHuaweiMatcher()
 	if err != nil {
 		logger.Errorf("Failed to create HuaweiMatcher: %s", err)
 		os.Exit(1)
@@ -50,6 +50,11 @@ func main() {
 		// TODO: Call plugin with parameter
 		is_huawei_detected := false
 		mac_addresses, err := c.Request.Body.get("mac_addresses")
+		if err != nil { // mac address can't be found
+			c.JSON(400, gin.H{
+				"status": "Invalid Request",
+			})
+		}
 		for _, addr := range mac_addresses {
 			if matcher.match(addr) {
 				is_huawei_detected = true
