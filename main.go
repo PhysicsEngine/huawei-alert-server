@@ -41,7 +41,7 @@ func main() {
 	router.LoadHTMLGlob("templates/*.tmpl.html")
 	router.Static("/static", "static")
 
-	matcher, err := matcher.CreateHuaweiMatcher(logger)
+	matcher, err := matcher.CreateHuaweiMatcher(logger, "matcher")
 	if err != nil {
 		logger.Errorf("Failed to create HuaweiMatcher: %s", err)
 		os.Exit(1)
