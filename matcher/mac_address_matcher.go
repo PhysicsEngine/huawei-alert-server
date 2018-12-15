@@ -5,8 +5,8 @@ import (
 	"go.uber.org/zap"
 	"io"
 	"os"
-	"strings"
 	"path/filepath"
+	"strings"
 )
 
 type MacAddrHandler struct {
@@ -38,7 +38,7 @@ func createMatcher(logger *zap.SugaredLogger, name string, fileName string) (*Ma
 	var addresses []string
 	scanner := bufio.NewScanner(fp)
 	scanner.Split(bufio.ScanLines)
-	for scanner.Scan(){
+	for scanner.Scan() {
 		line := scanner.Text()
 		addresses = append(addresses, line)
 		if err == io.EOF {

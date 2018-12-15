@@ -1,8 +1,8 @@
 package matcher
 
 import (
-	"testing"
 	"go.uber.org/zap"
+	"testing"
 )
 
 // setup logger
