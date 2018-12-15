@@ -5,6 +5,10 @@ SERVICE_NAME := $(shell basename ${PWD})
 
 REVIEWDOG_ARG ?= -diff="git diff master"
 
+GO_BUILD_ENV := CGO_ENABLED=0 GOOS=linux GOARCH=amd64
+DOCKER_BUILD=$(shell pwd)/.docker_build
+DOCKER_CMD=$(DOCKER_BUILD)/go-getting-started
+
 LINT_TOOLS=\
 	golang.org/x/lint/golint \
 	github.com/client9/misspell \
@@ -66,3 +70,14 @@ reviewdog:
 coverage:
 	@go test -race -coverpkg=./... -coverprofile=coverage.txt ./...
 
+$(DOCKER_CMD): clean
+	mkdir -p $(DOCKER_BUILD)
+	$(GO_BUILD_ENV) go build -v -o $(DOCKER_CMD) .
+
+.PHONY: clean
+clean:
+	rm -rf $(DOCKER_BUILD)
+
+.PHONY: heroku
+heroku: $(DOCKER_CMD)
+	heroku container:push web

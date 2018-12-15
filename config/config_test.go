@@ -5,17 +5,14 @@ import (
 	"testing"
 )
 
-const (
-	testGCPProjectID = "test_project"
-)
-
 func TestReadFromEnv(t *testing.T) {
 	reset := setenvs(t, map[string]string{
-		"ENV":            envDevelopment,
+		"ENV": envLocal,
 	})
 	defer reset()
 
 	env, err := ReadFromEnv()
+	print(env)
 	if err != nil {
 		t.Fatalf("err: %s", err)
 	}
@@ -24,18 +21,8 @@ func TestReadFromEnv(t *testing.T) {
 
 func TestReadFromEnvValidationFailed(t *testing.T) {
 	reset := setenvs(t, map[string]string{
-		"ENV":            "production",
+		"ENV": "production",
 	})
-	defer reset()
-
-	_, err := ReadFromEnv()
-	if err == nil {
-		t.Fatalf("expect to be faield")
-	}
-}
-
-func TestReadFromEnvProcessFailed(t *testing.T) {
-	reset := unsetenv(t, "GCP_PROJECT_ID")
 	defer reset()
 
 	_, err := ReadFromEnv()
@@ -51,14 +38,14 @@ func TestIsProduction(t *testing.T) {
 	}{
 		{
 			&Env{
-				Env: envDevelopment,
+				Env: envLocal,
 			},
 			false,
 		},
 
 		{
 			&Env{
-				Env: envProduction,
+				Env: envHerokuProd,
 			},
 			true,
 		},
@@ -85,14 +72,14 @@ func TestValidate(t *testing.T) {
 	}{
 		"Valid1": {
 			&Env{
-				Env: envDevelopment,
+				Env: envLocal,
 			},
 			true,
 		},
 
 		"Valid2": {
 			&Env{
-				Env: envProduction,
+				Env: envHerokuProd,
 			},
 			true,
 		},

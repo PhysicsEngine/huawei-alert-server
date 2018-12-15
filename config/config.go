@@ -7,8 +7,9 @@ import (
 )
 
 const (
-	envDevelopment = "development"
-	envProduction  = "production"
+	envLocal      = "local"
+	envHerokuProd = "heroku_prod"
+	envHerokuDev  = "heroku_dev"
 )
 
 // Env stores configuration settings extract from environmental variables
@@ -20,12 +21,11 @@ type Env struct {
 	// annotate datadog metrics or sentry error reporting. The value must be
 	// "development" or "production".
 	Env string `envconfig:"ENV" required:"true"`
-
 }
 
 // IsProduction returns true if it is production environment
 func (e *Env) IsProduction() bool {
-	return e.Env == envProduction
+	return e.Env == envHerokuProd
 }
 
 // validate validates
@@ -35,7 +35,7 @@ func (e *Env) validate() error {
 		errMsg string
 	}{
 		{
-			e.Env != envDevelopment && e.Env != envProduction,
+			e.Env != envLocal && e.Env != envHerokuProd,
 			fmt.Sprintf("invalid env is specifed: %q", e.Env),
 		},
 
