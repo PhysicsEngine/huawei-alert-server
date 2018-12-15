@@ -56,7 +56,10 @@ func main() {
 	router.POST("/api/notification", func(c *gin.Context) {
 		// TODO: Call plugin with parameter
 		var req Request
+		// Restore the io.ReadCloser to its original state
+
 		if err := c.ShouldBindJSON(&req); err != nil {
+			logger.Errorf("get error request:: %s, err::%s", req, err)
 			// mac address can't be found
 			c.JSON(400, gin.H{"status": "Invalid Request"})
 			return
