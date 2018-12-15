@@ -1,13 +1,13 @@
 package main
 
 import (
+	"bytes"
 	"github.com/PhysicsEngine/huawei-alert-server/config"
 	"github.com/gin-gonic/gin"
 	_ "github.com/heroku/x/hmetrics/onload"
 	"go.uber.org/zap"
 	"log"
 	"net/http"
-	"bytes"	
 	"os"
 )
 
@@ -42,22 +42,22 @@ func main() {
 		// TODO: Call plugin with parameter
 		jsonStr := "{}"
 		url := "https://maker.ifttt.com/trigger/huawei_alert/with/key/c9GxSBX5gGyKITjQTGsuwH"
-    req, err := http.NewRequest(
+		req, err := http.NewRequest(
 			"POST",
 			url,
 			bytes.NewBuffer([]byte(jsonStr)),
-		)		
+		)
 		if err != nil {
 			logger.Errorf("Invalid http request")
 		}
-    req.Header.Set("Content-Type", "application/json")
+		req.Header.Set("Content-Type", "application/json")
 
-    client := &http.Client{}
+		client := &http.Client{}
 		resp, err := client.Do(req)
 		if err != nil {
 			logger.Errorf("Fail to send notification")
-		}		
-    defer resp.Body.Close()		
+		}
+		defer resp.Body.Close()
 
 		c.JSON(200, gin.H{
 			"status": "OK",
