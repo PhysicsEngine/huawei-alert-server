@@ -55,7 +55,7 @@ func main() {
 				"status": "Invalid Request",
 			})
 		}
-		for _, addr := range mac_addresses {
+		for addr := range mac_addresses {
 			if matcher.match(addr) {
 				is_huawei_detected = true
 				break
