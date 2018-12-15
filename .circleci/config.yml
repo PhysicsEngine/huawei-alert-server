@@ -1,0 +1,41 @@
+version: 2
+defaults: &defaults
+  working_directory: /go/src/github.com/PhysicsEngine/huawei-alert-server
+
+golang: &golang
+  <<: *defaults
+  docker:
+    - image: circleci/golang:1.9
+
+jobs:
+  build:
+    <<: *golang
+    steps:
+      - checkout
+      - run:
+          name: make build
+          command: |
+            make build
+
+  test:
+    <<: *golang
+    steps:
+      - checkout
+      - run:
+          name: Run test
+          command: |
+            make test 
+
+filters: &filters
+  filters:
+    branches:
+      only: /.*/
+    tags:
+      only: /.*/
+
+workflows:
+  version: 2
+  build-and-test:
+    jobs:
+      - build
+      - test
