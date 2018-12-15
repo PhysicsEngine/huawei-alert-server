@@ -1,6 +1,6 @@
 version: 2
 defaults: &defaults
-  working_directory: /go/src/github.com/{{ORG_NAME}}/{{REPO_NAME}}
+  working_directory: /go/src/github.com/PhysicsEngine/huawei-alert-server
 
 golang: &golang
   <<: *defaults
@@ -22,7 +22,7 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-          at: /go/src/github.com/{{ORG_NAME}}/{{REPO_NAME}}
+          at: /go/src/github.com/PhysicsEngine/huawei-alert-server
       - run:
           name: Run test and collect coverages
           command: |
