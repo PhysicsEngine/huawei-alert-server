@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bytes"
 	"github.com/PhysicsEngine/huawei-alert-server/config"
 	"github.com/PhysicsEngine/huawei-alert-server/matcher"
 	"github.com/PhysicsEngine/huawei-alert-server/slackhandler"
