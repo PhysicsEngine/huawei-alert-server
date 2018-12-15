@@ -13,8 +13,16 @@ all: test build
 $(GOPATH)/bin/dep:
 	@go get github.com/golang/dep/cmd/dep
 
+.PHONY: dep
+dep: $(GOPATH)/bin/dep
+	@dep ensure -v
+
+.PHONY: dep-vendor-only
+dep-vendor-only: $(GOPATH)/bin/dep
+	@dep ensure -v -vendor-only
+
 .PHONY: build
-build: 
+build: dep-vendor-only 
 	CGO_ENABLED=0 go build -o bin/server \
         -ldflags "-X main.version=$(VERSION) -X main.serviceName=$(SERVICE_NAME)" \
 		github.com/PhysicsEngine/$(SERVICE_NAME)
@@ -27,7 +35,7 @@ check-format:
 	@test -z `go fmt ./... | tee /dev/stderr`
 
 .PHONY: test
-test: check-format
+test: dep-vendor-only check-format
 	@go test -v -race ./...
 
 .PHONY: run
