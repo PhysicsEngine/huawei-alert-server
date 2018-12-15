@@ -7,7 +7,6 @@ import (
 	"github.com/gin-gonic/gin"
 	_ "github.com/heroku/x/hmetrics/onload"
 	"go.uber.org/zap"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -58,15 +57,9 @@ func main() {
 		// TODO: Call plugin with parameter
 		var req Request
 		// Restore the io.ReadCloser to its original state
-		var bodyBytes []byte
-		bodyBytes, err = ioutil.ReadAll(c.Request.Body)
-		if err != nil {
-			logger.Errorf("get request error %s", err)
-		} else {
-			logger.Infof("get request %s", string(bodyBytes))
-		}
 
 		if err := c.ShouldBindJSON(&req); err != nil {
+			logger.Errorf("get error request:: %s, err::%s", req, err)
 			// mac address can't be found
 			c.JSON(400, gin.H{"status": "Invalid Request"})
 			return
