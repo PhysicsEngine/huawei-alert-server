@@ -36,7 +36,7 @@ func main() {
 	router.LoadHTMLGlob("templates/*.tmpl.html")
 	router.Static("/static", "static")
 
-	matcher, err := matcher.createHuaweiMatcher(&logger)
+	matcher, err := matcher.CreateHuaweiMatcher(logger)
 	if err != nil {
 		logger.Errorf("Failed to create HuaweiMatcher: %s", err)
 		os.Exit(1)
@@ -56,7 +56,7 @@ func main() {
 			})
 		}
 		for addr := range mac_addresses {
-			if matcher.match(addr) {
+			if matcher.Match(addr) {
 				is_huawei_detected = true
 				break
 			}
