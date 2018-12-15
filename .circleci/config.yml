@@ -21,8 +21,6 @@ jobs:
     <<: *golang
     steps:
       - checkout
-      - attach_workspace:
-          at: /go/src/github.com/PhysicsEngine/huawei-alert-server
       - run:
           name: Run test and collect coverages
           command: |
