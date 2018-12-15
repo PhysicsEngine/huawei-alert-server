@@ -2,13 +2,18 @@ package notification
 
 import "go.uber.org/zap"
 
-var m = make(map[string]*NotificationSender)
-
-func Init(logger *zap.SugaredLogger) {
-	m["slack"] = CreateSlackSender(logger)
-	m["line"] = CreateLineSender(logger)
+type Handler struct {
+	senders map[string]*Sender
 }
 
-func getSender(name string) *NotificationSender {
-	return m[name]
+func Create(logger *zap.SugaredLogger) *Handler {
+	var senders = make(map[string]*Sender)
+	senders["slack"] = CreateSlackSender(logger)
+	senders["line"] = CreateLineSender(logger)
+	return &Handler{senders}
+}
+
+func (handler *Handler) Send(name string) error {
+	_, err := handler.senders[name].send(nil)
+	return err
 }
