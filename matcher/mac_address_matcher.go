@@ -2,6 +2,7 @@ package matcher
 
 import (
 	"bufio"
+	"fmt"
 	"go.uber.org/zap"
 	"io"
 	"os"
@@ -9,24 +10,24 @@ import (
 	"strings"
 )
 
-type MacAddrHandler struct {
+type MacAddrMatcher struct {
 	name     string
 	prefixes []string
 	logger   *zap.SugaredLogger
 }
 
-func (handler *MacAddrHandler) Match(target string) bool {
-	for _, addr := range handler.prefixes {
+func (matcher *MacAddrMatcher) Match(target string) bool {
+	for _, addr := range matcher.prefixes {
 		if strings.Contains(target, addr) {
-			handler.logger.Infof("Match target::%s in prefix::%s", target, addr)
+			matcher.logger.Infof("Match target::%s in prefix::%s", target, addr)
 			return true
 		}
 	}
-	handler.logger.Infof("Match target::%s in any prefix", target)
+	matcher.logger.Infof("Match target::%s in any prefix", target)
 	return false
 }
 
-func createMatcher(logger *zap.SugaredLogger, name string, fileName string) (*MacAddrHandler, error) {
+func createMatcher(logger *zap.SugaredLogger, name string, fileName string) (*MacAddrMatcher, error) {
 	logger.Infof("read file::%s", fileName)
 	fp, err := os.Open(fileName) // For read access.
 	defer fp.Close()
@@ -48,13 +49,13 @@ func createMatcher(logger *zap.SugaredLogger, name string, fileName string) (*Ma
 		}
 	}
 
-	return &MacAddrHandler{name, addresses, logger}, nil
+	return &MacAddrMatcher{name, addresses, logger}, nil
 }
 
-func CreateHuaweiMatcher(logger *zap.SugaredLogger) (*MacAddrHandler, error) {
-	fileNmae, err := filepath.Abs("./huawei.txt")
+func CreateHuaweiMatcher(logger *zap.SugaredLogger, basedir string) (*MacAddrMatcher, error) {
+	fileName, err := filepath.Abs(fmt.Sprintf("./%s/huawei.txt", basedir))
 	if err != nil {
 		return nil, err
 	}
-	return createMatcher(logger, "huawai", fileNmae)
+	return createMatcher(logger, "huawai", fileName)
 }
