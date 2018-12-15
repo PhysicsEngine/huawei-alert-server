@@ -1,9 +1,11 @@
 version: 2
+defaults: &defaults
+  working_directory: /go/src/github.com/PhysicsEngine/huawei-alert-server
 
 golang: &golang
+  <<: *defaults
   docker:
     - image: circleci/golang:1.9
-    working_directory: /go/src/github.com/PhysicsEngine/huawei-alert-server
 
 jobs:
   build:
@@ -20,13 +22,9 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Run test and collect coverages
+          name: Run test
           command: |
-            make coverage
-      - run:
-          name: Upload coverages to codecov
-          command: |
-            bash <(curl -s https://codecov.io/bash)
+            make test 
 
 filters: &filters
   filters:
