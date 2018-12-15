@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bytes"
 	"github.com/PhysicsEngine/huawei-alert-server/config"
 	"github.com/PhysicsEngine/huawei-alert-server/matcher"
 	"github.com/PhysicsEngine/huawei-alert-server/slackhandler"
@@ -12,6 +11,12 @@ import (
 	"net/http"
 	"os"
 )
+
+type Request struct {
+	mac_addresses []string
+	notification  string
+	device_id     string
+}
 
 func main() {
 	// setup logger
@@ -48,14 +53,13 @@ func main() {
 
 	router.POST("/api/notification", func(c *gin.Context) {
 		// TODO: Call plugin with parameter
-		is_huawei_detected := false
-		mac_addresses, err := c.Request.Body.get("mac_addresses")
-		if err != nil { // mac address can't be found
-			c.JSON(400, gin.H{
-				"status": "Invalid Request",
-			})
+		var req Request
+		if err := c.ShouldBindJSON(&req); err != nil {
+			// mac address can't be found
+			c.JSON(400, gin.H{"status": "Invalid Request"})
 		}
-		for addr := range mac_addresses {
+		is_huawei_detected := false
+		for _, addr := range req.mac_addresses {
 			if matcher.Match(addr) {
 				is_huawei_detected = true
 				break
@@ -63,6 +67,7 @@ func main() {
 		}
 		if is_huawei_detected {
 			notifyDevice := "slack"
+			jsonStr := "{}"
 			switch notifyDevice {
 			case
 				"slack":
@@ -70,8 +75,6 @@ func main() {
 			default:
 				logger.Errorf("no device notified")
 			}
-			jsonStr := "{}"
-			slackhandler.PostSlack(jsonStr)
 		}
 		c.JSON(200, gin.H{
 			"status": "OK",

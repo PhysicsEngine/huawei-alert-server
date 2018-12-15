@@ -7,6 +7,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"fmt"
 )
 
 type MacAddrMatcher struct {
@@ -51,10 +52,10 @@ func createMatcher(logger *zap.SugaredLogger, name string, fileName string) (*Ma
 	return &MacAddrMatcher{name, addresses, logger}, nil
 }
 
-func CreateHuaweiMatcher(logger *zap.SugaredLogger) (*MacAddrMatcher, error) {
-	fileNmae, err := filepath.Abs("./huawei.txt")
+func CreateHuaweiMatcher(logger *zap.SugaredLogger, basedir string) (*MacAddrMatcher, error) {
+	fileName, err := filepath.Abs(fmt.Sprintf("./%s/huawei.txt", basedir))
 	if err != nil {
 		return nil, err
 	}
-	return createMatcher(logger, "huawai", fileNmae)
+	return createMatcher(logger, "huawai", fileName)
 }
