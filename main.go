@@ -16,7 +16,7 @@ import (
 type Request struct {
 	mac_addresses []string
 	notification  string
-	device_id string
+	device_id     string
 }
 
 func main() {
@@ -42,7 +42,7 @@ func main() {
 	router.LoadHTMLGlob("templates/*.tmpl.html")
 	router.Static("/static", "static")
 
-	matcher, err := matcher.CreateHuaweiMatcher(&logger)
+	matcher, err := matcher.CreateHuaweiMatcher(logger)
 	if err != nil {
 		logger.Errorf("Failed to create HuaweiMatcher: %s", err)
 		os.Exit(1)
@@ -60,8 +60,8 @@ func main() {
 			c.JSON(400, gin.H{"status": "Invalid Request"})
 		}
 		is_huawei_detected := false
-		for addr := range mac_addresses {
-			if matcher.match(addr) {
+		for addr := range req.mac_addresses {
+			if matcher.Match(addr) {
 				is_huawei_detected = true
 				break
 			}
@@ -72,7 +72,7 @@ func main() {
 			switch notifyDevice {
 			case
 				"slack":
-				slackhandler.PostSlack(jsonStr, &logger)
+				slackhandler.PostSlack(jsonStr, logger)
 			default:
 				logger.Errorf("no device notified")
 			}
