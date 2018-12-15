@@ -2,12 +2,12 @@ package matcher
 
 import (
 	"bufio"
+	"fmt"
 	"go.uber.org/zap"
 	"io"
 	"os"
 	"path/filepath"
 	"strings"
-	"fmt"
 )
 
 type MacAddrMatcher struct {

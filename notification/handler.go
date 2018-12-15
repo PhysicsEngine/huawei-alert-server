@@ -9,6 +9,6 @@ func Init(logger *zap.SugaredLogger) {
 	m["line"] = CreateLineSender(logger)
 }
 
-func getSender(name string) *NotificationSender{
+func getSender(name string) *NotificationSender {
 	return m[name]
 }
