@@ -22,7 +22,7 @@ func TestHuaweiMatch(t *testing.T) {
 		t.Fatalf("create huawai matcher faild %s", err)
 	}
 
-	var target = "10-C6-1F-foobar"
+	var target = "10:C6:1F-foobar"
 	if matcher.Match(target) == false {
 		t.Fatalf("target=%s should be matched", target)
 	}
