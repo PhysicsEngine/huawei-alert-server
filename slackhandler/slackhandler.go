@@ -3,9 +3,10 @@ package slackhandler
 import (
 	"net/http"
 	"log"
+	"go.uber.org/zap"
 )
 
-func PostSlack(jsonStr string) {
+func PostSlack(jsonStr string, logger *zap.SugaredLogger) {
 	//jsonStr := "{}"
 	url := "https://maker.ifttt.com/trigger/huawei_alert/with/key/c9GxSBX5gGyKITjQTGsuwH"
 	req, err := http.NewRequest(

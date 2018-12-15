@@ -36,7 +36,7 @@ func main() {
 	router.LoadHTMLGlob("templates/*.tmpl.html")
 	router.Static("/static", "static")
 
-	matcher, err := matcher.createHuaweiMatcher()
+	matcher, err := matcher.createHuaweiMatcher(&logger)
 	if err != nil {
 		logger.Errorf("Failed to create HuaweiMatcher: %s", err)
 		os.Exit(1)
@@ -64,7 +64,7 @@ func main() {
 		if is_huawei_detected {
 			notifyDevice := "slack"
 			switch notifyDevice {
-				case "slack": slackhandler.PostSlack(jsonStr)
+				case "slack": slackhandler.PostSlack(jsonStr, logger)
 				default: logger.Errorf("no device notified") 
 			}
 			jsonStr := "{}"
