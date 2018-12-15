@@ -64,8 +64,10 @@ func main() {
 		if is_huawei_detected {
 			notifyDevice := "slack"
 			switch notifyDevice {
-				case "slack": slackhandler.PostSlack(jsonStr, logger)
-				default: logger.Errorf("no device notified") 
+				case 
+					"slack": slackhandler.PostSlack(jsonStr, logger)
+				default: 
+					logger.Errorf("no device notified") 
 			}
 			jsonStr := "{}"
 			slackhandler.PostSlack(jsonStr)

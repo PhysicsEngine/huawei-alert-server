@@ -1,9 +1,9 @@
-package slackhandler 
+package slackhandler
 
 import (
-	"net/http"
-	"log"
 	"go.uber.org/zap"
+	"log"
+	"net/http"
 )
 
 func PostSlack(jsonStr string, logger *zap.SugaredLogger) {
