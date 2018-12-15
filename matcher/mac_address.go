@@ -1,11 +1,11 @@
 package handler
 
 import (
-	"strings"
-	"os"
 	"bufio"
-	"io"
 	"go.uber.org/zap"
+	"io"
+	"os"
+	"strings"
 )
 
 type MacAddrHandler struct {
@@ -22,7 +22,7 @@ func match(handler *MacAddrHandler, target string) bool {
 	return false
 }
 
-func createHandler(logger *zap.SugaredLogger, name string, fileName string) (*MacAddrHandler, error) {
+func createMatcher(logger *zap.SugaredLogger, name string, fileName string) (*MacAddrHandler, error) {
 	logger.Infow("read file::%s", fileName)
 	fp, err := os.Open(fileName) // For read access.
 	defer fp.Close()
@@ -47,6 +47,6 @@ func createHandler(logger *zap.SugaredLogger, name string, fileName string) (*Ma
 	return &MacAddrHandler{name, addresses}, nil
 }
 
-func createHuawaiHandler(logger *zap.SugaredLogger) (*MacAddrHandler, error){
-	return createHandler(logger, "hoawai", "./hoawai.txt")
+func createHuawaiMatcher(logger *zap.SugaredLogger) (*MacAddrHandler, error) {
+	return createMatcher(logger, "hoawai", "./hoawai.txt")
 }
