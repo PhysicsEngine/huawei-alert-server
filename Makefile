@@ -24,7 +24,7 @@ format:
 
 .PHONY: check-format
 check-format:
-	@gofmt -d ./..
+	@test -z "`gofmt -d ./..`"
 
 .PHONY: test
 test: check-format
