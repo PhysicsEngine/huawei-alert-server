@@ -23,7 +23,7 @@ func (matcher *MacAddrMatcher) Match(target string) bool {
 			return true
 		}
 	}
-	matcher.logger.Infof("Match target::%s in any prefix", target)
+	matcher.logger.Infof("Does not match target::%s in any prefix", target)
 	return false
 }
 
