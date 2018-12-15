@@ -1,0 +1,47 @@
+version: 2
+defaults: &defaults
+  working_directory: /go/src/github.com/{{ORG_NAME}}/{{REPO_NAME}}
+
+golang: &golang
+  <<: *defaults
+  docker:
+    - image: circleci/golang:1.9
+
+jobs:
+  build:
+    <<: *golang
+    steps:
+      - checkout
+      - run:
+          name: make build
+          command: |
+            make build
+
+  test:
+    <<: *golang
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /go/src/github.com/{{ORG_NAME}}/{{REPO_NAME}}
+      - run:
+          name: Run test and collect coverages
+          command: |
+            make coverage
+      - run:
+          name: Upload coverages to codecov
+          command: |
+            bash <(curl -s https://codecov.io/bash)
+
+filters: &filters
+  filters:
+    branches:
+      only: /.*/
+    tags:
+      only: /.*/
+
+workflows:
+  version: 2
+  build-and-test:
+    jobs:
+      - build:
+      - test:
