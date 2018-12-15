@@ -1,13 +1,13 @@
 package main
 
 import (
+	"github.com/PhysicsEngine/huawei-alert-server/config"
+	"github.com/gin-gonic/gin"
+	_ "github.com/heroku/x/hmetrics/onload"
+	"go.uber.org/zap"
 	"log"
 	"net/http"
 	"os"
-	"github.com/gin-gonic/gin"
-	_ "github.com/heroku/x/hmetrics/onload"
-	"github.com/PhysicsEngine/huawei-alert-server/config"
-	"go.uber.org/zap"
 )
 
 func main() {
