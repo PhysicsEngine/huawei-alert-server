@@ -59,7 +59,7 @@ func main() {
 			c.JSON(400, gin.H{"status": "Invalid Request"})
 		}
 		is_huawei_detected := false
-		for addr := range req.mac_addresses {
+		for _, addr := range req.mac_addresses {
 			if matcher.Match(addr) {
 				is_huawei_detected = true
 				break
