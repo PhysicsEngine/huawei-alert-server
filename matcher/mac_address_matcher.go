@@ -15,14 +15,14 @@ type MacAddrHandler struct {
 	logger   *zap.SugaredLogger
 }
 
-func (handler *MacAddrHandler) match(target string) bool {
+func (handler *MacAddrHandler) Match(target string) bool {
 	for _, addr := range handler.prefixes {
 		if strings.Contains(target, addr) {
-			handler.logger.Infof("match target::%s in prefix::%s", target, addr)
+			handler.logger.Infof("Match target::%s in prefix::%s", target, addr)
 			return true
 		}
 	}
-	handler.logger.Infof("match target::%s in any prefix", target)
+	handler.logger.Infof("Match target::%s in any prefix", target)
 	return false
 }
 
@@ -51,7 +51,7 @@ func createMatcher(logger *zap.SugaredLogger, name string, fileName string) (*Ma
 	return &MacAddrHandler{name, addresses, logger}, nil
 }
 
-func createHuaweiMatcher(logger *zap.SugaredLogger) (*MacAddrHandler, error) {
+func CreateHuaweiMatcher(logger *zap.SugaredLogger) (*MacAddrHandler, error) {
 	fileNmae, err := filepath.Abs("./huawei.txt")
 	if err != nil {
 		return nil, err
