@@ -1,13 +1,13 @@
 package main
 
 import (
-	"bytes"
 	"github.com/PhysicsEngine/huawei-alert-server/config"
 	"github.com/PhysicsEngine/huawei-alert-server/matcher"
 	"github.com/PhysicsEngine/huawei-alert-server/notification"
 	"github.com/gin-gonic/gin"
 	_ "github.com/heroku/x/hmetrics/onload"
 	"go.uber.org/zap"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -57,14 +57,13 @@ func main() {
 	router.POST("/api/notification", func(c *gin.Context) {
 		// TODO: Call plugin with parameter
 		var req Request
-		body, err := c.Request.GetBody()
+		// Restore the io.ReadCloser to its original state
+		var bodyBytes []byte
+		bodyBytes, err = ioutil.ReadAll(c.Request.Body)
 		if err != nil {
 			logger.Errorf("get request error %s", err)
 		} else {
-			buf := new(bytes.Buffer)
-			buf.ReadFrom(body)
-			bodyStr := buf.String()
-			logger.Infof("get request %s", bodyStr)
+			logger.Infof("get request %s", string(bodyBytes))
 		}
 
 		if err := c.ShouldBindJSON(&req); err != nil {
