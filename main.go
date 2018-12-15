@@ -82,7 +82,7 @@ func main() {
 				handler.Send(notifyDevice)
 				c.JSON(200, gin.H{"status": "found"})
 				return
-				
+
 			default:
 				logger.Errorf("not defined notification channel")
 				c.JSON(400, gin.H{"status": "notfication channel not found"})
