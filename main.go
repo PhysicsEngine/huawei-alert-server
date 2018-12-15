@@ -4,17 +4,29 @@ import (
 	"log"
 	"net/http"
 	"os"
-
 	"github.com/gin-gonic/gin"
 	_ "github.com/heroku/x/hmetrics/onload"
+	"github.com/PhysicsEngine/huawei-alert-server/config"
+	"go.uber.org/zap"
 )
 
 func main() {
-	port := os.Getenv("PORT")
+	// setup logger
+	zapLogger, _ := zap.NewProduction()
 
-	if port == "" {
-		log.Fatal("$PORT must be set")
+	logger := zapLogger.Sugar()
+	defer func() {
+		err := zapLogger.Sync()
+		log.Fatal(err)
+	}()
+
+	env, err := config.ReadFromEnv()
+	if err != nil {
+		logger.Errorf("Failed to read env vars: %s", err)
+		os.Exit(1)
 	}
+
+	port := env.Port
 
 	router := gin.New()
 	router.Use(gin.Logger())

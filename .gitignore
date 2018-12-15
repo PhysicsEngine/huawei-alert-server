@@ -14,3 +14,6 @@
 # ide
 .idea
 *.iml
+
+# output
+huawei-alert-server

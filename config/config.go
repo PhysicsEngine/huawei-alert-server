@@ -20,7 +20,8 @@ type Env struct {
 	// Env is environment where application is running. This value is used to
 	// annotate datadog metrics or sentry error reporting. The value must be
 	// "development" or "production".
-	Env string `envconfig:"ENV" required:"true"`
+	Env string `envconfig:"ENV" default:"local"`
+	Port string `envconfig:"PORT" default:"8888"`
 }
 
 // IsProduction returns true if it is production environment
