@@ -37,6 +37,10 @@ func main() {
 	router.Static("/static", "static")
 
 	matcher, err := createHuaweiMatcher()
+	if err != nil {
+		logger.Errorf("Failed to create HuaweiMatcher: %s", err)
+		os.Exit(1)
+	}
 
 	router.GET("/", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "index.tmpl.html", nil)
