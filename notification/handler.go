@@ -10,6 +10,7 @@ func Create(logger *zap.SugaredLogger) *Handler {
 	var senders = make(map[string]*Sender)
 	senders["slack"] = CreateSlackSender(logger)
 	senders["line"] = CreateLineSender(logger)
+	senders["twitter"] = CreateTwitterSender(logger)
 	return &Handler{senders}
 }
 
