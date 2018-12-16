@@ -1,14 +1,16 @@
 package notification
 
 import (
-	"testing"
+	"github.com/PhysicsEngine/huawei-alert-server/config"
 	"go.uber.org/zap"
+	"testing"
 )
 
 func TestCreateHandler(t *testing.T) {
 	zapLogger, _ := zap.NewProduction()
 	logger := zapLogger.Sugar()
-	handler := CreateHandler(logger)
+	env, _ := config.ReadFromEnv()
+	handler := CreateHandler(logger, env)
 	if handler == nil {
 		t.Fatalf("sender is null")
 	}
@@ -17,7 +19,8 @@ func TestCreateHandler(t *testing.T) {
 func TestContains(t *testing.T) {
 	zapLogger, _ := zap.NewProduction()
 	logger := zapLogger.Sugar()
-	handler := CreateHandler(logger)
+	env, _ := config.ReadFromEnv()
+	handler := CreateHandler(logger, env)
 	if !handler.Contains("slack") {
 		t.Fatalf("slack should be contained")
 	}
@@ -31,4 +34,3 @@ func TestContains(t *testing.T) {
 		t.Fatalf("foo should not be contained")
 	}
 }
-

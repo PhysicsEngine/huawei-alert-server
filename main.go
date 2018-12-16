@@ -13,9 +13,9 @@ import (
 )
 
 type Request struct {
-	Mac_addresses []string `json:"mac_addresses" binding:"required"`
-	Notification  string   `json:"notification" binding:"required"`
-	Device_id     string   `json:"device_id" binding:"required"`
+	macAddresses []string `json:"mac_addresses" binding:"required"`
+	notification string   `json:"notification" binding:"required"`
+	deviceId     string   `json:"device_id" binding:"required"`
 }
 
 func main() {
@@ -34,12 +34,12 @@ func main() {
 		os.Exit(1)
 	}
 
-	handler := notification.CreateHandler(logger)
+	handler := notification.CreateHandler(logger, env)
 
 	port := env.Port
 
 	router := gin.New()
-	router.Use(logger)
+	router.Use(gin.Logger())
 	router.LoadHTMLGlob("templates/*.tmpl.html")
 	router.Static("/static", "static")
 
@@ -65,7 +65,7 @@ func main() {
 			return
 		}
 		isMatched := false
-		for _, addr := range req.Mac_addresses {
+		for _, addr := range req.macAddresses {
 			logger.Infof("%s found", addr)
 			if matcher.Match(addr) {
 				isMatched = true
@@ -73,7 +73,7 @@ func main() {
 			}
 		}
 		if isMatched {
-			notify := req.Notification
+			notify := req.notification
 			if handler.Contains(notify) {
 				handler.Send(notify)
 				c.JSON(200, gin.H{"status": "send notification to slack"})

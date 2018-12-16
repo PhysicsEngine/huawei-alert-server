@@ -20,8 +20,11 @@ type Env struct {
 	// Env is environment where application is running. This value is used to
 	// annotate datadog metrics or sentry error reporting. The value must be
 	// "development" or "production".
-	Env  string `envconfig:"ENV" default:"local"`
-	Port string `envconfig:"PORT" default:"8888"`
+	Env        string `envconfig:"ENV" default:"local"`
+	Port       string `envconfig:"PORT" default:"8888"`
+	LineUrl    string `envconfig:"LineUrl" default:"https://maker.ifttt.com/trigger/huawei_alert_line/with/key/c9GxSBX5gGyKITjQTGsuwH"`
+	SlackUrl   string `envconfig:"SlackUrl" default:"https://maker.ifttt.com/trigger/huawei_alert/with/key/c9GxSBX5gGyKITjQTGsuwH"`
+	TwitterUrl string `envconfig:"TwitterUrl" default:"https://maker.ifttt.com/trigger/huawei_alert/with/key/c9GxSBX5gGyKITjQTGsuwH"`
 }
 
 // IsProduction returns true if it is production environment

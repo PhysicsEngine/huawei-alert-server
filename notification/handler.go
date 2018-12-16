@@ -1,16 +1,19 @@
 package notification
 
-import "go.uber.org/zap"
+import (
+	"github.com/PhysicsEngine/huawei-alert-server/config"
+	"go.uber.org/zap"
+)
 
 type Handler struct {
 	senders map[string]*Sender
 }
 
-func CreateHandler(logger *zap.SugaredLogger) *Handler {
+func CreateHandler(logger *zap.SugaredLogger, env *config.Env) *Handler {
 	var senders = make(map[string]*Sender)
-	senders["slack"] = CreateSlackSender(logger)
-	senders["line"] = CreateLineSender(logger)
-	senders["twitter"] = CreateTwitterSender(logger)
+	senders["slack"] = CreateSender(logger, env.SlackUrl)
+	senders["line"] = CreateSender(logger, env.LineUrl)
+	senders["twitter"] = CreateSender(logger, env.TwitterUrl)
 	return &Handler{senders}
 }
 

@@ -16,19 +16,7 @@ func (sender *Sender) send(body io.Reader) (*http.Response, error) {
 	return http.Post(sender.url, "application/json", body)
 }
 
-func createSender(logger *zap.SugaredLogger, url string) *Sender {
+func CreateSender(logger *zap.SugaredLogger, url string) *Sender {
 	logger.Infof("create ifttt handler. url:: %s", url)
 	return &Sender{url, logger}
-}
-
-func CreateLineSender(logger *zap.SugaredLogger) *Sender {
-	return createSender(logger, "https://maker.ifttt.com/trigger/huawei_alert_line/with/key/c9GxSBX5gGyKITjQTGsuwH")
-}
-
-func CreateSlackSender(logger *zap.SugaredLogger) *Sender {
-	return createSender(logger, "https://maker.ifttt.com/trigger/huawei_alert/with/key/c9GxSBX5gGyKITjQTGsuwH")
-}
-
-func CreateTwitterSender(logger *zap.SugaredLogger) *Sender {
-	return createSender(logger, "https://maker.ifttt.com/trigger/huawei_alert_twitter/with/key/c9GxSBX5gGyKITjQTGsuwH")
 }
