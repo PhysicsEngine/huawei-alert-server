@@ -33,7 +33,7 @@ func TestTwitterSend(t *testing.T) {
 	sender := CreateSender(logger, env.TwitterUrl)
 	_, err := sender.send(nil)
 	if err != nil {
-		t.Fatalf("create huawai matcher faild %s", err)
+		t.Fatalf("send to twitter faild %s", err)
 	}
 }
 
@@ -44,7 +44,7 @@ func TestSendLine(t *testing.T) {
 	sender := CreateSender(logger, env.LineUrl)
 	_, err := sender.send(nil)
 	if err != nil {
-		t.Fatalf("create huawai matcher faild %s", err)
+		t.Fatalf("send to line faild %s", err)
 	}
 }
 
@@ -55,6 +55,6 @@ func TestSendSlack(t *testing.T) {
 	sender := CreateSender(logger, env.SlackUrl)
 	_, err := sender.send(nil)
 	if err != nil {
-		t.Fatalf("create huawai matcher faild %s", err)
+		t.Fatalf("send to slack faild %s", err)
 	}
 }
