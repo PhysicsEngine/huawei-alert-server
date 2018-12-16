@@ -13,9 +13,9 @@ import (
 )
 
 type Request struct {
-	Mac_addresses []string `json:"mac_addresses" binding:"required"`
-	Notification  string   `json:"notification" binding:"required"`
-	Device_id     string   `json:"device_id" binding:"required"`
+	macAddresses []string `json:"mac_addresses" binding:"required"`
+	notification string   `json:"notification" binding:"required"`
+	deviceId     string   `json:"device_id" binding:"required"`
 }
 
 func main() {
@@ -34,7 +34,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	handler := notification.Create(logger)
+	handler := notification.CreateHandler(logger, env)
 
 	port := env.Port
 
@@ -64,33 +64,21 @@ func main() {
 			c.JSON(400, gin.H{"status": "Invalid Request"})
 			return
 		}
-		is_huawei_detected := false
-		for _, addr := range req.Mac_addresses {
+		isMatched := false
+		for _, addr := range req.macAddresses {
 			logger.Infof("%s found", addr)
 			if matcher.Match(addr) {
-				is_huawei_detected = true
+				isMatched = true
 				break
 			}
 		}
-		if is_huawei_detected {
-			notifyDevice := req.Notification
-			switch notifyDevice {
-			case
-				"slack":
-				handler.Send(notifyDevice)
+		if isMatched {
+			notify := req.notification
+			if handler.Contains(notify) {
+				handler.Send(notify)
 				c.JSON(200, gin.H{"status": "send notification to slack"})
 				return
-			case
-				"line":
-				handler.Send(notifyDevice)
-				c.JSON(200, gin.H{"status": "send notification to line"})
-				return
-			case
-				"twitter":
-				handler.Send(notifyDevice)
-				c.JSON(200, gin.H{"status": "send notification to twitter"})
-
-			default:
+			} else {
 				logger.Errorf("not defined notification channel")
 				c.JSON(400, gin.H{"status": "notfication channel not found"})
 				return

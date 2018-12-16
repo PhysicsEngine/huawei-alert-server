@@ -1,40 +1,60 @@
 package notification
 
 import (
+	"github.com/PhysicsEngine/huawei-alert-server/config"
 	"go.uber.org/zap"
 	"testing"
 )
 
-// setup logger
-var zapLogger, _ = zap.NewProduction()
-var logger = zapLogger.Sugar()
-
 func TestCreateSlackSender(t *testing.T) {
-	sender := CreateSlackSender(logger)
+	zapLogger, _ := zap.NewProduction()
+	logger := zapLogger.Sugar()
+	env, _ := config.ReadFromEnv()
+	sender := CreateSender(logger, env.SlackUrl)
 	if sender == nil {
 		t.Fatalf("sender is null")
 	}
 }
 
 func TestCreateLineSender(t *testing.T) {
-	sender := CreateLineSender(logger)
+	zapLogger, _ := zap.NewProduction()
+	logger := zapLogger.Sugar()
+	env, _ := config.ReadFromEnv()
+	sender := CreateSender(logger, env.LineUrl)
 	if sender == nil {
 		t.Fatalf("sender is null")
 	}
 }
 
-func TestSendSlack(t *testing.T) {
-	sender := CreateSlackSender(logger)
+func TestTwitterSend(t *testing.T) {
+	zapLogger, _ := zap.NewProduction()
+	logger := zapLogger.Sugar()
+	env, _ := config.ReadFromEnv()
+	sender := CreateSender(logger, env.TwitterUrl)
 	_, err := sender.send(nil)
 	if err != nil {
-		t.Fatalf("create huawai matcher faild %s", err)
+		t.Fatalf("send to twitter faild %s", err)
 	}
 }
 
 func TestSendLine(t *testing.T) {
-	sender := CreateLineSender(logger)
+	zapLogger, _ := zap.NewProduction()
+	logger := zapLogger.Sugar()
+	env, _ := config.ReadFromEnv()
+	sender := CreateSender(logger, env.LineUrl)
 	_, err := sender.send(nil)
 	if err != nil {
-		t.Fatalf("create huawai matcher faild %s", err)
+		t.Fatalf("send to line faild %s", err)
+	}
+}
+
+func TestSendSlack(t *testing.T) {
+	zapLogger, _ := zap.NewProduction()
+	logger := zapLogger.Sugar()
+	env, _ := config.ReadFromEnv()
+	sender := CreateSender(logger, env.SlackUrl)
+	_, err := sender.send(nil)
+	if err != nil {
+		t.Fatalf("send to slack faild %s", err)
 	}
 }
