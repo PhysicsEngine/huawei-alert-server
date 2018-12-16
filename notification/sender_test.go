@@ -5,11 +5,10 @@ import (
 	"testing"
 )
 
-// setup logger
-var zapLogger, _ = zap.NewProduction()
-var logger = zapLogger.Sugar()
 
 func TestCreateSlackSender(t *testing.T) {
+	zapLogger, _ := zap.NewProduction()
+	logger := zapLogger.Sugar()
 	sender := CreateSlackSender(logger)
 	if sender == nil {
 		t.Fatalf("sender is null")
@@ -17,6 +16,8 @@ func TestCreateSlackSender(t *testing.T) {
 }
 
 func TestCreateLineSender(t *testing.T) {
+	zapLogger, _ := zap.NewProduction()
+	logger := zapLogger.Sugar()
 	sender := CreateLineSender(logger)
 	if sender == nil {
 		t.Fatalf("sender is null")
@@ -24,6 +25,8 @@ func TestCreateLineSender(t *testing.T) {
 }
 
 func TestSendSlack(t *testing.T) {
+	zapLogger, _ := zap.NewProduction()
+	logger := zapLogger.Sugar()
 	sender := CreateSlackSender(logger)
 	_, err := sender.send(nil)
 	if err != nil {
@@ -32,6 +35,8 @@ func TestSendSlack(t *testing.T) {
 }
 
 func TestSendLine(t *testing.T) {
+	zapLogger, _ := zap.NewProduction()
+	logger := zapLogger.Sugar()
 	sender := CreateLineSender(logger)
 	_, err := sender.send(nil)
 	if err != nil {

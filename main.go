@@ -34,12 +34,12 @@ func main() {
 		os.Exit(1)
 	}
 
-	handler := notification.Create(logger)
+	handler := notification.CreateHandler(logger)
 
 	port := env.Port
 
 	router := gin.New()
-	router.Use(gin.Logger())
+	router.Use(logger)
 	router.LoadHTMLGlob("templates/*.tmpl.html")
 	router.Static("/static", "static")
 
@@ -64,33 +64,21 @@ func main() {
 			c.JSON(400, gin.H{"status": "Invalid Request"})
 			return
 		}
-		is_huawei_detected := false
+		isMatched := false
 		for _, addr := range req.Mac_addresses {
 			logger.Infof("%s found", addr)
 			if matcher.Match(addr) {
-				is_huawei_detected = true
+				isMatched = true
 				break
 			}
 		}
-		if is_huawei_detected {
-			notifyDevice := req.Notification
-			switch notifyDevice {
-			case
-				"slack":
-				handler.Send(notifyDevice)
+		if isMatched {
+			notify := req.Notification
+			if handler.Contains(notify) {
+				handler.Send(notify)
 				c.JSON(200, gin.H{"status": "send notification to slack"})
 				return
-			case
-				"line":
-				handler.Send(notifyDevice)
-				c.JSON(200, gin.H{"status": "send notification to line"})
-				return
-			case
-				"twitter":
-				handler.Send(notifyDevice)
-				c.JSON(200, gin.H{"status": "send notification to twitter"})
-
-			default:
+			} else {
 				logger.Errorf("not defined notification channel")
 				c.JSON(400, gin.H{"status": "notfication channel not found"})
 				return
